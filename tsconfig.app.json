@@ -3,7 +3,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "paths":{"@dragandrop/*":["src/app/pages/drag-and-drop/*"]},
   },
   "files": [
     "src/main.ts",

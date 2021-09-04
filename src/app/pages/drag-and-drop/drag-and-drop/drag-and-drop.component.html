@@ -1,0 +1,55 @@
+<div class="ui-container">
+  <div class="drag-and-drop-section">
+    <div class="drag-section" #dragSection>
+      <!-- <button #uploadBtn class="upload-btn">upload</button> -->
+      <input #inputFile type="file" name="" hidden multiple id="" />
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Size MB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let file of this.uploadedFiles">
+            <ng-container #name *ngIf="file.status === 'loaded'">
+              <td width="70%">{{ file.file.name }}</td>
+              <td width="30%">{{ file.file.size / 1000000 }} MB</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Preloader -->
+  <div
+    class="upladed-files-section"
+    *ngIf="preloadFiles.length && showPreloader"
+  >
+    <div class="title">
+      <span> Files {{ preloadFiles.length }}</span>
+      <span class="close-btn" (click)="closeProloader()"> X </span>
+    </div>
+    <div class="items-container">
+      <div class="items" *ngFor="let file of this.preloadFiles">
+        <p class="text-overflow">
+          {{ file.file.name }}
+        </p>
+        <p>
+          <span
+            [ngClass]="{
+              loading: file.status === 'loading',
+              loaded: file.status === 'loaded'
+            }"
+          >
+            {{
+              file.status === "loading"
+                ? "Loading await please..."
+                : "Loaded Succesfully"
+            }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
