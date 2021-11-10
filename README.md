@@ -1,5 +1,25 @@
 # NgDragAndDrop
 
+Instal modules
+
+```
+npm install
+```
+
+Testing with events and directives
+
+```
+git checkout feat-events-directives-verision
+```
+
+Test
+
+```
+ng serve -o
+```
+
+#
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.2.
 
 ## Development server
