@@ -9,7 +9,7 @@ npm install
 Testing with events and directives
 
 ```
-git checkout feat-events-directives-verision
+git checkout main
 ```
 
 Test
@@ -17,6 +17,20 @@ Test
 ```
 ng serve -o
 ```
+
+Upload File Server for testing:
+
+[Download File Server](https://github.com/lennon182/file-server-node)
+
+https://github.com/lennon182/file-server-node
+
+Run File Server
+
+```
+npm run dev
+```
+
+Open in port: 3000
 
 #
 
