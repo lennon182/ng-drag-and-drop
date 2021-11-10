@@ -1,3 +1,4 @@
+import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -33,7 +34,13 @@ export class DragAndDropComponent implements OnInit {
     'image/gif',
     'application/pdf',
     'application/zip',
+    'video/mp4',
+    'video/x-m4v',
+    'video/*',
   ];
+
+  public uploadProgress: number = 0;
+  // public currentUploadingItem: number = 0;
 
   constructor(
     private r2: Renderer2,
@@ -104,6 +111,7 @@ export class DragAndDropComponent implements OnInit {
    * @param filesList
    * @returns Promise Void
    */
+
   private async preLoadingFiles(filesList: FileList | null | undefined) {
     const listLength = filesList!.length;
     for (let index = 0; index < listLength; index++) {
@@ -124,31 +132,39 @@ export class DragAndDropComponent implements OnInit {
      * Upload
      */
     this.files.forEach(async (file: Uploads, i) => {
-      try {
-        await this.upload(file);
-        this.preloadFiles[i].status = 'loaded';
-        this.uploadedFiles = [...this.uploadedFiles, file];
-        if (this.files.length === i + 1) {
+      /**
+       * Sends File to Api Server - UPLOAD FILES
+       * @param file - this is it the file to save
+       * @returns e: HttpEvent<Object>
+       */
+      this.uploadService.uploadFiles(file).subscribe((e: HttpEvent<Object>) => {
+        if (e.type == 1) {
+          this.preloadFiles[i].loaded = e.loaded;
+          this.preloadFiles[i].total = e.total;
+          this.preloadFiles[i].porcent = Math.round(
+            (e.loaded / (e.total || 0)) * 100
+          );
+          this.preloadFiles[i].progressBar = `${this.preloadFiles[i].porcent}%`;
+
+          if (this.preloadFiles[i].loaded === this.preloadFiles[i].total) {
+            this.preloadFiles[i].status = 'loaded';
+            this.uploadedFiles = [...this.uploadedFiles, file];
+          }
+        } else if (e.type === 3) {
           this.files = [];
           this.uploadingFiles = [];
-          console.log(this.uploadedFiles);
+          // console.log(this.uploadedFiles);
+        } else if (e.type === 4) {
+          if (e.body?.hasOwnProperty('name')) {
+            const fileUploade: uploadedBodyResponse =
+              e.body.valueOf() as uploadedBodyResponse;
+            console.log('FileUploaded=> ', fileUploade.name);
+          }
         }
-      } catch (error) {
-        console.log('Auch!');
-      }
+      });
     });
   }
 
-  /**
-   * Sends File to Api Server
-   * @param file - this is it the file to save
-   * @returns Promise Object
-   */
-  private async upload(file: Uploads): Promise<void> {
-    const filesData = new FormData();
-    filesData.append('file', file.file);
-    return await this.uploadService.uploadFiles(filesData);
-  }
   /**
    *
    * ========= [Files Preloader Observer] =========
@@ -169,4 +185,13 @@ export class DragAndDropComponent implements OnInit {
 export interface Uploads {
   file: File;
   status: string;
+  loaded?: number;
+  porcent?: number;
+  total?: number;
+  progressBar?: string;
+}
+
+export interface uploadedBodyResponse {
+  msg: string;
+  name: string;
 }

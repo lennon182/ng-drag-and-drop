@@ -65,13 +65,11 @@ $mainColor: blue;
     bottom: 0;
     right: 0;
     align-items: center;
-    // border: solid 1px #f0f0f0;
     border-radius: 1rem 1rem 0 0;
     position: absolute;
     background-color: #fff;
     .items-container {
       overflow-y: scroll;
-      max-height: 320px;
     }
     &.my-class {
       background-color: brown;
@@ -89,30 +87,38 @@ $mainColor: blue;
       }
     }
     .items {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      margin: 0.5rem;
-      p {
-        margin: 0.2rem 0.5rem;
-      }
-      p.text-overflow {
-        width: 230px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin: 0.2rem;
+      width: 520px;
+      p.file-name {
+        max-width: 100%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin: 0.2rem 0.5rem;
+        vertical-align: middle;
+        margin: 0.5rem;
+        span {
+          padding: 0.5rem;
+        }
+      }
+      p.file-porcent {
+        display: flex;
+        align-items: center;
+        max-width: 100%;
+        span {
+          padding: 0.5rem;
+          color: #fff;
+        }
       }
     }
   }
 }
 .loading {
-  background-color: rgba(252, 128, 40, 0.7);
-  padding: 0.2rem 1rem;
+  background-color: rgba(58, 70, 245, 0.7);
   border-radius: 0.3rem;
 }
 .loaded {
   background-color: rgba(58, 175, 58, 0.7);
-  padding: 0.2rem 1rem;
   border-radius: 0.3rem;
 }

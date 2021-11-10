@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEvent,
+  HttpEventType,
+  HttpUserEvent,
+} from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,23 +22,29 @@ export class UploadFilesService {
     return this._uploadFiles;
   }
 
-  public uploadFiles(file: FormData): Promise<void> {
+  public uploadFiles(file: Uploads): Observable<HttpEvent<Object>> {
+    const filesData = new FormData();
+    filesData.append('file', file.file);
     const path = 'http://localhost:3000/upload';
     return this.http
-      .post(path, file, {
+      .post(path, filesData, {
         reportProgress: true,
         observe: 'events',
       })
       .pipe(
-        map((e) => {
-          return console.log(e);
+        map((e: HttpEvent<Object>) => {
+          return e;
         })
-      )
-      .toPromise();
+      );
   }
 }
 
 export interface Uploads {
   file: File;
   status: string;
+}
+
+export interface uploadedBodyResponse {
+  msg: string;
+  name: string;
 }

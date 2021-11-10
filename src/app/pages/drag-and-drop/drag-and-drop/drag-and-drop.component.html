@@ -31,23 +31,21 @@
       <span class="close-btn" (click)="closeProloader()"> X </span>
     </div>
     <div class="items-container">
-      <div class="items" *ngFor="let file of this.preloadFiles">
-        <p class="text-overflow">
-          {{ file.file.name }}
-        </p>
-        <p>
-          <span
-            [ngClass]="{
-              loading: file.status === 'loading',
-              loaded: file.status === 'loaded'
-            }"
-          >
-            {{
-              file.status === "loading"
-                ? "Loading await please..."
-                : "Loaded Succesfully"
-            }}
+      <div class="items" *ngFor="let file of preloadFiles; let i = index">
+        <p class="file-name">
+          <span>
+            {{ file.file.name }}
           </span>
+        </p>
+        <p
+          class="file-porcent"
+          [style.width]="file.progressBar"
+          [ngClass]="{
+            loading: file.status === 'loading',
+            loaded: file.loaded === file.total
+          }"
+        >
+          <span> {{ file.porcent }}% </span>
         </p>
       </div>
     </div>
